@@ -1,6 +1,7 @@
 const { Chromeless } = require('chromeless');
 const moment = require('moment');
 const fs = require('fs');
+const chalk = require('chalk');
 
 const timeOfFlight = process.env.FLIGHT_DEPARTURE_TIME;
 const confirmationNumber = process.env.CONFIRMATION;
@@ -9,10 +10,14 @@ const [firstName, lastName] = process.env.NAME.split(' ');
 const moment_timeOfFlight = moment(new Date(timeOfFlight));
 const allowedTimeToCheckin = moment(new Date(timeOfFlight)).subtract(1441, "minutes");
 const moment_currentTime = moment();
+console.log(chalk.bgMagenta('---- RUNNING SCRIPT ----- '))
+console.log(chalk.green(`
+    flight time : ${moment_timeOfFlight.format('MMMM Do YYYY, h:mm:ss a')} \r
+    
+    allowed time to checkin : ${allowedTimeToCheckin.format('MMMM Do YYYY, h:mm:ss a')} \r
 
-console.log('flight time : ' + moment_timeOfFlight.format('MMMM Do YYYY, h:mm:ss a'));
-console.log('allowed time to checkin : ' + allowedTimeToCheckin.format('MMMM Do YYYY, h:mm:ss a'));
-console.log('current time : ' + moment_currentTime.format('MMMM Do YYYY, h:mm:ss a'));
+    'current time : ${moment_currentTime.format('MMMM Do YYYY, h:mm:ss a')} \r
+    `));
 
 if(allowedTimeToCheckin.isSameOrBefore(moment_currentTime)){
 
@@ -25,7 +30,7 @@ if(allowedTimeToCheckin.isSameOrBefore(moment_currentTime)){
 
     async function run(){
         if(counter > stopTryingAfterCountNumber){
-            console.log('--- stopping due to incorrect timeframe');
+            console.log(chalk.bgRed('--- stopping due to incorrect timeframe'));
             await chromeless.end();
             return false;
         }
@@ -39,7 +44,7 @@ if(allowedTimeToCheckin.isSameOrBefore(moment_currentTime)){
             .type(lastName, 'input#passengerLastName')
             .click('#form-mixin--submit-button')
         if(await chromeless.exists('.page-error')){
-            console.log('--- fail');
+            console.log(chalk.red('--- fail : The confirmation number you put in is not correct'));
             counter++;
             run();
         } else {

@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/wesleyduff/swHack#readme",
   "dependencies": {
+    "chalk": "^2.4.2",
     "chromeless": "^1.5.2",
     "moment": "^2.24.0"
   }
