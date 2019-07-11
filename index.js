@@ -48,6 +48,8 @@ if(allowedTimeToCheckin.isSameOrBefore(moment_currentTime)){
             counter++;
             run();
         } else {
+            await chromeless
+                .
             console.log('continue')
             await chromeless.end();
         }
